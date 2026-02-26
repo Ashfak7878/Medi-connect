@@ -1,30 +1,30 @@
 const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv'); // Imports the dotenv package
-const connectDB = require('./config/db'); // Imports your database connection
+const dotenv = require('dotenv');
+const connectDB = require('./config/db');
 
-// 1. Load the secrets from the .env file
+// dotenv config
 dotenv.config();
 
-// 2. Connect to the Database
+// mongodb connection
 connectDB();
 
-// Create the Express app
+// rest object
 const app = express();
 
-// Middlewares
-app.use(cors());
+// middlewares
 app.use(express.json());
 
-// A simple test route
-app.get('/', (req, res) => {
-  res.send('Hello from the MediConnect Backend!');
-});
+// --- THIS IS THE NEW PART ---
+// routes
+app.use('/api/v1/user', require('./routes/userRoutes'));
+// ----------------------------
 
-// Define the port (It will try to use the port from .env, or default to 5000)
-const PORT = process.env.PORT || 5000;
+// port
+const port = process.env.PORT || 5000;
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running beautifully on port ${PORT}`);
+// listen port
+app.listen(port, () => {
+  console.log(
+    `Server Running in ${process.env.NODE_ENV || 'development'} Mode on port ${port}`
+  );
 });
