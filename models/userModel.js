@@ -15,6 +15,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Password is required'], // Rule: Must have a password
   },
+  notification: {
+    type: Array,
+    default: [],
+  },
+  seennotification: {
+    type: Array,
+    default: [],
+  },
   role: {
     type: String,
     enum: ['patient', 'doctor', 'admin'],

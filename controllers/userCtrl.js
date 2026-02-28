@@ -1,7 +1,7 @@
 const userModel = require('../models/userModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const doctorModel = require('../models/doctorModel');
 // ==========================================
 // 1. REGISTER RECIPE
 // ==========================================
@@ -63,6 +63,32 @@ const getUserDataController = async (req, res) => {
     res.status(500).send({ message: 'Auth error', success: false, error });
   }
 };
+// ==========================================
+// 4. APPLY DOCTOR RECIPE
+// ==========================================
+const applyDoctorController = async (req, res) => {
+  try {
+    // 1. Create a new doctor application using the data from the request body.
+    // Notice how the 'status' is hardcoded to 'pending' by default in our model!
+    const newDoctor = await doctorModel({ ...req.body, status: 'pending' });
+    
+    // 2. Save it to the MongoDB database
+    await newDoctor.save();
+
+    // 3. Send a success message back to the user
+    res.status(201).send({
+      success: true,
+      message: 'Doctor Application Submitted Successfully',
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: 'Error While Applying For Doctor',
+    });
+  }
+};
 
 // Export all three recipes!
-module.exports = { registerController, loginController, getUserDataController };
+module.exports = { registerController, loginController, getUserDataController, applyDoctorController };
