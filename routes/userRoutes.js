@@ -1,17 +1,28 @@
 const express = require('express');
-const { registerController, loginController, getUserDataController, applyDoctorController } = require('../controllers/userCtrl');
-// Bring in the Bouncer!
-const authMiddleware = require('../middlewares/authMiddleware'); 
+const authMiddleware = require('../middlewares/authMiddleware');
+const { 
+  registerController, 
+  loginController, 
+  getUserDataController, 
+  applyDoctorController, 
+  bookAppointmentController, 
+  getAllApprovedDoctorsController 
+} = require('../controllers/userCtrl');
 
 const router = express.Router();
 
-// Public Routes (Anyone can access these without a wristband)
+// ==========================================
+// PUBLIC ROUTES
+// ==========================================
 router.post('/register', registerController);
 router.post('/login', loginController);
 
-
-// VIP Protected Route (You MUST pass the authMiddleware to reach the controller)
-router.post('/getUserData', authMiddleware, getUserDataController); 
-// Apply Doctor Route (Protected by the Bouncer)
+// ==========================================
+// PROTECTED ROUTES
+// ==========================================
+router.post('/getUserData', authMiddleware, getUserDataController);
 router.post('/apply-doctor', authMiddleware, applyDoctorController);
+router.post('/book-appointment', authMiddleware, bookAppointmentController);
+router.get('/getAllDoctors', authMiddleware, getAllApprovedDoctorsController);
+
 module.exports = router;
